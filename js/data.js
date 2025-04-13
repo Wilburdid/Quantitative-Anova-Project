@@ -268,7 +268,7 @@ const orbitalData = {
         radius: 2.4,           
         orbitRadius: 0.4,           
         orbitSpeed: 0.04,
-        rotationSpeed: 1.5,                  color: 0xbcb6a5,
+        rotationSpeed: 14.3,                  color: 0xbcb6a5,
         size: 3,
         realSize: 2440,      },
     venus: {
