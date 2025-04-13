@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap');
 
 :root {
-    /* Monochrome color palette */
     --primary-color: #121212;
     --secondary-color: #303030;
     --accent-color: #505050;
@@ -66,7 +65,6 @@ body {
     pointer-events: auto;
 }
 
-/* Main Menu */
 #main-menu {
     position: absolute;
     top: 0;
@@ -198,7 +196,6 @@ body {
     transition: all 0.1s ease;
 }
 
-/* Header Styles */
 header {
     position: absolute;
     top: 0;
@@ -327,7 +324,6 @@ header {
     cursor: pointer;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
     header {
         padding: 8px 10px;
@@ -753,7 +749,6 @@ button:active {
     color: var(--secondary-color);
 }
 
-/* UI Toggle Button */
 #toggle-ui-container {
     position: fixed;
     bottom: 30px;
@@ -779,7 +774,6 @@ button:active {
     box-shadow: 0 6px 18px rgba(0,0,0,0.4);
 }
 
-/* Hidden UI state */
 .hidden-ui #ui-container {
     opacity: 0;
     pointer-events: none;
@@ -912,7 +906,6 @@ button:active {
     }
 }
 
-/* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -938,7 +931,6 @@ button:active {
     background: transparent;
 }
 
-/* Apply scrollbar styling to specific elements */
 .panel-content,
 #planet-menu,
 #planet-info {
@@ -946,7 +938,6 @@ button:active {
     scrollbar-color: rgba(70, 70, 70, 0.8) rgba(15, 15, 15, 0.5);
 }
 
-/* Panel Styling */
 .panel {
     position: absolute;
     top: 50%;
@@ -960,7 +951,7 @@ button:active {
     border-radius: var(--ui-radius);
     padding: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 1000; /* Higher z-index to ensure panels appear on top */
+    z-index: 1000;
     box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     opacity: 1;
     visibility: visible;
@@ -969,7 +960,6 @@ button:active {
     flex-direction: column;
 }
 
-/* Panel that has been moved by the user won't use transform positioning */
 .panel.dragging, 
 .panel[style*="left"][style*="top"] {
     transform: none;
@@ -1084,7 +1074,6 @@ button:active {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* About panel and credits styling */
 .credits-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1133,7 +1122,6 @@ button:active {
     }
 }
 
-/* Fix for about panel */
 #about-panel {
     z-index: 1000;
 } 
