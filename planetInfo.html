@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<canvas id="background"></canvas>
-<script src="starsbackground.js"></script>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -11,53 +6,11 @@
   <title>Planet Information</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    body {
-      overflow: auto;
-      background: #000;
-      font-family: 'Arial', sans-serif;
-      opacity: 1;
-    }
-    .info-container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-    .planet-section {
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      transition: transform 0.3s ease;
-    }
-    .planet-section:hover {
-      transform: scale(1.02);
-    }
-    .planet-section h2 {
-      margin-bottom: 0.5rem;
-      color: #fff;
-    }
-    .planet-section p {
-      color: #ccc;
-      line-height: 1.5;
-    }
-    .fade-in {
-      animation: fadeIn 0.8s ease-in forwards;
-    }
-    .fade-out {
-      animation: fadeOut 0.8s ease-out forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
+    /* Your styles here */
   </style>
 </head>
 <body>
+  <canvas id="background"></canvas>
   <div class="info-container">
     <section class="planet-section" id="mercury">
       <h2>Mercury</h2>
@@ -67,6 +20,8 @@
     </section>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="starsbackground.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.body.classList.add('fade-in');
@@ -74,4 +29,3 @@
   </script>
 </body>
 </html>
-
