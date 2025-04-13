@@ -275,7 +275,7 @@ const orbitalData = {
         radius: 6.1,
         orbitRadius: 0.7,
         orbitSpeed: 0.015,
-        rotationSpeed: -0.8,                 color: 0xe7cdad,
+        rotationSpeed: 14.8,                 color: 0xe7cdad,
         size: 5.5,
         realSize: 6052,      },
     earth: {
