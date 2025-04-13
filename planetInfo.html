@@ -56,6 +56,9 @@
     .nav-links a:hover {
       background: rgba(255, 255, 255, 0.1);
     }
+    document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.add('fade-in');
+  });
     /* Fade in and fade out animations */
     .fade-in {
         animation: fadeIn 0.8s ease-in forwards;
@@ -76,6 +79,7 @@
     body {
         opacity: 1;
     }
+    
   </style>
 </head>
 <body>
