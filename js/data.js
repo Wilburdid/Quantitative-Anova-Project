@@ -329,6 +329,6 @@ const orbitalData = {
         realSize: 1188,      },
     moon: {
         radius: 1.7,
-        earthOrbitRadius: 0.1,                 realEarthOrbitRadius: 0.025,           orbitSpeed: 0.07,                      realOrbitSpeed: 0.23,                  rotationSpeed: 1.1,                   color: 0xcccccc,
+        earthOrbitRadius: 0.1,                 realEarthOrbitRadius: 0.025,           orbitSpeed: 0.07,                      realOrbitSpeed: 0.23,                  rotationSpeed: 15.0,                   color: 0xcccccc,
         size: 1.5,                             realSize: 1737,                        parentPlanet: "earth"              },
 }; 
