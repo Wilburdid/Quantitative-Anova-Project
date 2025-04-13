@@ -261,92 +261,74 @@ const orbitalData = {
         radius: 0,
         orbitRadius: 0,
         orbitSpeed: 0,
-        rotationSpeed: 0.2,           // ~27 days rotation
-        color: 0xffcc00,
+        rotationSpeed: 0.2,                   color: 0xffcc00,
         size: 20,
         realSize: 695500,      },
     mercury: {
         radius: 2.4,           
         orbitRadius: 0.4,           
         orbitSpeed: 0.04,
-        rotationSpeed: 1.5,          // 58.6 Earth days
-        color: 0xbcb6a5,
+        rotationSpeed: 1.5,                  color: 0xbcb6a5,
         size: 3,
         realSize: 2440,      },
     venus: {
         radius: 6.1,
         orbitRadius: 0.7,
         orbitSpeed: 0.015,
-        rotationSpeed: -0.8,         // 243 Earth days (retrograde)
-        color: 0xe7cdad,
+        rotationSpeed: -0.8,                 color: 0xe7cdad,
         size: 5.5,
         realSize: 6052,      },
     earth: {
         radius: 6.4,
         orbitRadius: 1.0,
         orbitSpeed: 0.01,
-        rotationSpeed: 15.0,         // 24 hours (should complete many rotations per orbit)
-        color: 0x2277ff,
+        rotationSpeed: 15.0,                 color: 0x2277ff,
         size: 6,
         realSize: 6371,      },
     mars: {
         radius: 3.4,
         orbitRadius: 1.5,
         orbitSpeed: 0.008,
-        rotationSpeed: 14.6,         // 24.6 hours
-        color: 0xd58545,
+        rotationSpeed: 14.6,                 color: 0xd58545,
         size: 4,
         realSize: 3390,      },
     jupiter: {
         radius: 69.9,
         orbitRadius: 5.2,
         orbitSpeed: 0.004,
-        rotationSpeed: 35.0,         // 9.9 hours (very fast rotation)
-        color: 0xd8ca9d,
+        rotationSpeed: 35.0,                 color: 0xd8ca9d,
         size: 12,
         realSize: 69911,      },
     saturn: {
         radius: 58.2,
         orbitRadius: 9.5,
         orbitSpeed: 0.003,
-        rotationSpeed: 33.0,         // 10.7 hours
-        color: 0xead6b8,
+        rotationSpeed: 33.0,                 color: 0xead6b8,
         size: 10,
         realSize: 58232,      },
     uranus: {
         radius: 25.4,
         orbitRadius: 19.2,
         orbitSpeed: 0.0022,
-        rotationSpeed: -21.0,        // 17.2 hours (retrograde)
-        color: 0xc8f3fc,
+        rotationSpeed: -21.0,                color: 0xc8f3fc,
         size: 7,
         realSize: 25362,      },
     neptune: {
         radius: 24.6,
         orbitRadius: 30.1,
         orbitSpeed: 0.0018,
-        rotationSpeed: 22.0,         // 16.1 hours
-        color: 0x3d5ef2,
+        rotationSpeed: 22.0,                 color: 0x3d5ef2,
         size: 6.8,
         realSize: 24622,      },
     pluto: {
         radius: 1.2,
         orbitRadius: 39.5,
         orbitSpeed: 0.0016,
-        rotationSpeed: -5.6,         // 6.4 Earth days (retrograde)
-        color: 0xccbbaa,
+        rotationSpeed: -5.6,                 color: 0xccbbaa,
         size: 2.5,
         realSize: 1188,      },
     moon: {
         radius: 1.7,
-        earthOrbitRadius: 0.1,         // Distance from Earth in visual scale
-        realEarthOrbitRadius: 0.025,   // Increased to reflect that all planets could fit between Earth and Moon
-        orbitSpeed: 0.07,              // Speed for visual mode
-        realOrbitSpeed: 0.23,          // Adjusted for realistic mode (27.3 days compared to Earth's 365 days)
-        rotationSpeed: 1.1,           // Synchronized with orbital period
-        color: 0xcccccc,
-        size: 1.5,                     // Visual scale size
-        realSize: 1737,                // Radius in km
-        parentPlanet: "earth"          // Indicates that it orbits Earth, not the Sun
-    },
+        earthOrbitRadius: 0.1,                 realEarthOrbitRadius: 0.025,           orbitSpeed: 0.07,                      realOrbitSpeed: 0.23,                  rotationSpeed: 1.1,                   color: 0xcccccc,
+        size: 1.5,                             realSize: 1737,                        parentPlanet: "earth"              },
 }; 
