@@ -1,25 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Planet Information</title>
-  <!-- Link to your common CSS file -->
   <link rel="stylesheet" href="styles.css" />
-  <!-- Additional styles specific to the planet info page -->
   <style>
-    /* Adjust the body for scrolling since your front page hides overflow */
     body {
       overflow: auto;
       background: #000;
       font-family: 'Arial', sans-serif;
+      opacity: 1;
     }
-    /* A container for your planet info sections */
     .info-container {
       max-width: 800px;
       margin: 2rem auto;
       padding: 1rem;
     }
-    /* Styling for each planet section */
     .planet-section {
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid rgba(255, 255, 255, 0.2);
@@ -39,58 +36,37 @@
       color: #ccc;
       line-height: 1.5;
     }
-    /* Optional: style navigation links if you include one */
-    .nav-links {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .nav-links a {
-      color: #fff;
-      margin: 0 1rem;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50px;
-      transition: background 0.3s ease;
-    }
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    document.addEventListener('DOMContentLoaded', function () {
-    document.body.classList.add('fade-in');
-  });
-    /* Fade in and fade out animations */
     .fade-in {
-        animation: fadeIn 0.8s ease-in forwards;
+      animation: fadeIn 0.8s ease-in forwards;
     }
     .fade-out {
-        animation: fadeOut 0.8s ease-out forwards;
+      animation: fadeOut 0.8s ease-out forwards;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
-        to { opacity: 1; }
+      to { opacity: 1; }
     }
-      @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
-    
-    /* Make sure the body starts visible on pages that use the fade-in */
-    body {
-        opacity: 1;
-    }
-    
   </style>
 </head>
 <body>
-      <div class="info-container">
-      <!-- Section for Mercury -->
-      <section class="planet-section" id="mercury">
-        <h2>Mercury</h2>
-        <p>
-          Mercury is the smallest planet in our solar system and orbits closest to the Sun. Its surface temperatures vary dramatically between day and night.
-        </p>
-        <!-- Add additional information such as images, facts, or data tables -->
-      </section>
-      </div>
+  <div class="info-container">
+    <section class="planet-section" id="mercury">
+      <h2>Mercury</h2>
+      <p>
+        Mercury is the smallest planet in our solar system and orbits closest to the Sun. Its surface temperatures vary dramatically between day and night.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.body.classList.add('fade-in');
+    });
+  </script>
 </body>
+</html>
+
