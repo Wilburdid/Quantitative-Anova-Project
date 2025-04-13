@@ -1819,7 +1819,7 @@ function resetSystem() {
             planet.scale.set(2.5, 2.5, 2.5);
             
             const targetPosition = new THREE.Vector3().copy(planet.position);
-            const distance = 5;
+            const distance = 10;
             
             const directionToSun = new THREE.Vector3().subVectors(new THREE.Vector3(0, 0, 0), targetPosition).normalize();
             const offset = new THREE.Vector3().copy(directionToSun).multiplyScalar(-distance);
