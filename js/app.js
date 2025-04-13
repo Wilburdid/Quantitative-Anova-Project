@@ -19,9 +19,7 @@ let accumulatedTime = 0;
 let lastFrameTime = 0;
 let smoothTimeSpeed = 1;
 let targetTimeSpeed = 1;
-let timeSpeedLerpFactor = 0.15; // Controls how smooth the time speed transition is
-let galaxyRotationSpeed = 0.00004; // Doubled from 0.00001 to make galaxies rotate faster
-let realScale = false;
+let timeSpeedLerpFactor = 0.15; let galaxyRotationSpeed = 0.00004; let realScale = false;
 let selectedPlanet = null;
 let orbitLines = [];
 let cameraTarget = new THREE.Vector3();
@@ -31,19 +29,13 @@ let startTime = 0;
 let defaultMaxDistance = 500000000;  let galaxyClusters = [];  let currentCameraDistance = 0;  let lastLODTime = 0;
 let lodUpdateInterval = 100;
 let activeCameraTween = null;  
- let moons = {}; // New object to store moons
-let initialPlanetAngles = {};  // Add this line to store initial angles
-let initialMoonAngles = {};    // Add this line to store initial moon angles
-
-// Add this function near the top of the file, after the variable declarations
+ let moons = {}; let initialPlanetAngles = {};  let initialMoonAngles = {};    
 function resetSystem() {
-    // Clear all objects from scene
-    while(scene.children.length > 0){ 
+        while(scene.children.length > 0){ 
         scene.remove(scene.children[0]); 
     }
     
-    // Reset core arrays and objects
-    planets = [];
+        planets = [];
     galaxies = [];
     superClusters = [];
     galaxyClusters = [];
@@ -52,19 +44,16 @@ function resetSystem() {
     initialPlanetAngles = {};
     initialMoonAngles = {};
     
-    // Reset camera to initial startup position
-    camera.position.set(0, 500, 1500);
+        camera.position.set(0, 500, 1500);
     camera.lookAt(0, 0, 0);
     controls.target.set(0, 0, 0);
     
-    // Reset core animation variables
-    accumulatedTime = 0;
+        accumulatedTime = 0;
     lastFrameTime = clock.getElapsedTime();
     selectedPlanet = null;
     cameraFollowing = false;
     
-    // Recreate the scene contents
-    createLights();
+        createLights();
     createStarfield();
     createHomeGalaxy();
     createDistantGalaxies();
@@ -82,28 +71,23 @@ function resetSystem() {
     createDistantSuperClusters();
     createSolarSystem();
     
-    // Initialize settings panel
-    const settingsPanel = document.getElementById('settings-panel');
+        const settingsPanel = document.getElementById('settings-panel');
     if (settingsPanel) {
         settingsPanel.classList.add('hidden');
         settingsPanel.style.zIndex = '1000';
     }
     
-    // Initialize about panel
-    const aboutPanel = document.getElementById('about-panel');
+        const aboutPanel = document.getElementById('about-panel');
     if (aboutPanel) {
         aboutPanel.classList.add('hidden');
         aboutPanel.style.zIndex = '1000';
     }
     
-    // Create event listeners
-    createEventListeners();
+        createEventListeners();
     
-    // Make panels draggable
-    makePanelsDraggable();
+        makePanelsDraggable();
     
-    // Hide UI initially
-    document.body.classList.add('hidden-ui');
+        document.body.classList.add('hidden-ui');
     document.getElementById('ui-container').style.transform = 'translateY(-100%)';
     document.getElementById('ui-container').style.opacity = '0';
     document.getElementById('ui-container').style.visibility = 'hidden';
@@ -112,8 +96,7 @@ function resetSystem() {
     document.getElementById('main-menu').classList.remove('hidden');
     mainMenuActive = true;
     
-    // Start animation loop
-    animate();
+        animate();
 }
 
  function createScene() {
@@ -171,11 +154,8 @@ function resetSystem() {
 }
 
  function createStarfield() {
-    // This function now just creates the distant starfield background
-    // The galaxy creation functions are called directly in init() and resetSystem()
-    
-    // Create background stars (add this if you want a starry background)
-    const starGeometry = new THREE.BufferGeometry();
+            
+        const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({
         color: 0xffffff,
         size: 1.0,
@@ -810,8 +790,7 @@ function resetSystem() {
         baseSize: 1.5 * sizeFactor,
         isRepresentative: Math.random() < 0.3,
         components: [],
-        rotationSpeed: galaxyRotationSpeed * (0.5 + Math.random()) // Random variation in rotation speed
-    };
+        rotationSpeed: galaxyRotationSpeed * (0.5 + Math.random())     };
     
          Object.keys(vertices).forEach(component => {
         if (vertices[component].length > 0) {
@@ -850,8 +829,7 @@ function resetSystem() {
     scene.add(sun);
     planets.sun = sun;
     
-    // Add sun glow
-    const sunGlowGeometry = new THREE.SphereGeometry(orbitalData.sun.size + 2, 32, 32);
+        const sunGlowGeometry = new THREE.SphereGeometry(orbitalData.sun.size + 2, 32, 32);
     const sunGlowMaterial = new THREE.ShaderMaterial({
         uniforms: {
             c: { value: 0.1 },
@@ -888,17 +866,14 @@ function resetSystem() {
     sunGlow.userData = { planetId: 'sun' };
     sun.add(sunGlow);
     
-    // Add fiery particles to the sun
-    createSunParticles();
+        createSunParticles();
     
     Object.keys(orbitalData).forEach(planetId => {
         if (planetId === 'sun') return;
         
-        // Skip moon objects since they will be created separately
-        if (orbitalData[planetId].parentPlanet) return;
+                if (orbitalData[planetId].parentPlanet) return;
         
-        // Generate random initial angle for each planet
-        initialPlanetAngles[planetId] = Math.random() * Math.PI * 2;
+                initialPlanetAngles[planetId] = Math.random() * Math.PI * 2;
         
         const planet = createPlanet(planetId);
         planets[planetId] = planet;
@@ -909,18 +884,15 @@ function resetSystem() {
         scene.add(orbitLine);
     });
     
-    // Create moons after all planets are created
-    Object.keys(orbitalData).forEach(moonId => {
+        Object.keys(orbitalData).forEach(moonId => {
         if (orbitalData[moonId].parentPlanet) {
-            // Generate random initial angle for each moon
-            initialMoonAngles[moonId] = Math.random() * Math.PI * 2;
+                        initialMoonAngles[moonId] = Math.random() * Math.PI * 2;
             
             const moon = createMoon(moonId);
             moons[moonId] = moon;
             scene.add(moon);
             
-            // Create orbit line for the moon
-            const moonOrbitLine = createMoonOrbitLine(moonId);
+                        const moonOrbitLine = createMoonOrbitLine(moonId);
             orbitLines.push(moonOrbitLine);
             scene.add(moonOrbitLine);
         }
@@ -930,62 +902,46 @@ function resetSystem() {
 }
 
  function createSunParticles() {
-    // Create particle system for the sun's fiery surface
-    const particleCount = 2500;
+        const particleCount = 2500;
     const particles = new THREE.BufferGeometry();
     
-    // Create particle positions
-    const positions = new Float32Array(particleCount * 3);
+        const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
     
-    // Color ranges for particles
-    const colorOptions = [
-        new THREE.Color(0xffcc00).multiplyScalar(0.7), // Yellow
-        new THREE.Color(0xff8800).multiplyScalar(0.6), // Orange
-        new THREE.Color(0xff4400).multiplyScalar(0.5), // Red-orange
-        new THREE.Color(0xff2200).multiplyScalar(0.5), // Red
-        new THREE.Color(0xffffaa).multiplyScalar(0.6)  // Light yellow
-    ];
+        const colorOptions = [
+        new THREE.Color(0xffcc00).multiplyScalar(0.7),         new THREE.Color(0xff8800).multiplyScalar(0.6),         new THREE.Color(0xff4400).multiplyScalar(0.5),         new THREE.Color(0xff2200).multiplyScalar(0.5),         new THREE.Color(0xffffaa).multiplyScalar(0.6)      ];
     
-    // Create particles around the sun
-    const sunRadius = orbitalData.sun.size;
+        const sunRadius = orbitalData.sun.size;
     const sunRadiusOuter = sunRadius * 1.2;
     
     for (let i = 0; i < particleCount; i++) {
-        // Calculate position
-        const theta = Math.random() * Math.PI * 2;
+                const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         
-        // Random radius between sun surface and outer limit
-        const radius = sunRadius + Math.random() * (sunRadiusOuter - sunRadius);
+                const radius = sunRadius + Math.random() * (sunRadiusOuter - sunRadius);
         
-        // Convert spherical to cartesian coordinates
-        const x = radius * Math.sin(phi) * Math.cos(theta);
+                const x = radius * Math.sin(phi) * Math.cos(theta);
         const y = radius * Math.sin(phi) * Math.sin(theta);
         const z = radius * Math.cos(phi);
         
-        // Set positions
-        positions[i * 3] = x;
+                positions[i * 3] = x;
         positions[i * 3 + 1] = y;
         positions[i * 3 + 2] = z;
         
-        // Random color from our options
-        const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+                const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
         colors[i * 3] = color.r;
         colors[i * 3 + 1] = color.g;
         colors[i * 3 + 2] = color.b;
         
-        // Random size for each particle
-        sizes[i] = Math.random() * 1.5 + 0.3;
+                sizes[i] = Math.random() * 1.5 + 0.3;
     }
     
     particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     
-    // Create shader material for particles
-    const particleMaterial = new THREE.ShaderMaterial({
+        const particleMaterial = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0.0 },
             size: { value: 0.6 }
@@ -998,8 +954,7 @@ function resetSystem() {
             void main() {
                 vColor = color;
                 
-                // Add some movement to the particles
-                vec3 pos = position;
+                                vec3 pos = position;
                 float displacement = sin(time * 5.0 + position.x * 10.0) * 0.1 +
                                    sin(time * 3.0 + position.y * 8.0) * 0.1 +
                                    sin(time * 4.0 + position.z * 6.0) * 0.1;
@@ -1014,16 +969,13 @@ function resetSystem() {
         fragmentShader: `
             varying vec3 vColor;
             void main() {
-                // Create circular particles
-                float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+                                float r = distance(gl_PointCoord, vec2(0.5, 0.5));
                 if (r > 0.5) discard;
                 
-                // Make the edges glow and soften
-                float strength = 1.0 - (r / 0.5);
+                                float strength = 1.0 - (r / 0.5);
                 strength = pow(strength, 2.0);
                 
-                // Blend the color
-                gl_FragColor = vec4(vColor, strength);
+                                gl_FragColor = vec4(vColor, strength);
             }
         `,
         blending: THREE.AdditiveBlending,
@@ -1032,18 +984,15 @@ function resetSystem() {
         vertexColors: true
     });
     
-    // Create the particle system
-    const sunParticles = new THREE.Points(particles, particleMaterial);
+        const sunParticles = new THREE.Points(particles, particleMaterial);
     sunParticles.userData = { 
         planetId: 'sun',
         isSunParticles: true
     };
     
-    // Add to sun
-    sun.add(sunParticles);
+        sun.add(sunParticles);
     
-    // Add update function to animate the particles
-    const updateSunParticles = function(time) {
+        const updateSunParticles = function(time) {
         if (sunParticles && sunParticles.material) {
             sunParticles.material.uniforms.time.value = time;
             sunParticles.rotation.y += 0.001;
@@ -1052,8 +1001,7 @@ function resetSystem() {
         }
     };
     
-    // Add to global update loop
-    sun.userData.updateSunParticles = updateSunParticles;
+        sun.userData.updateSunParticles = updateSunParticles;
 }
 
  function createPlanet(planetId) {
@@ -1061,21 +1009,14 @@ function resetSystem() {
     
     const texture = new THREE.TextureLoader().load(planetData[planetId].texturePath);
     
-    // Calculate size based on scale mode
-    let planetSize;
+        let planetSize;
     if (realScale) {
-        // In realistic scale, the sun is 695,500 km in radius
-        // Earth is 6,371 km in radius
-        // We want to keep the ratio the same, but make it visible
-        // Calculate size as a proportion of the sun's size
-        const sizeRatio = data.realSize / orbitalData.sun.realSize;
+                                        const sizeRatio = data.realSize / orbitalData.sun.realSize;
         planetSize = orbitalData.sun.size * sizeRatio;
         
-        // Apply a minimum size to ensure visibility
-        planetSize = Math.max(planetSize, 0.5);
+                planetSize = Math.max(planetSize, 0.5);
     } else {
-        // Visual scale (not realistic)
-        planetSize = data.size;
+                planetSize = data.size;
     }
     
     const geometry = new THREE.SphereGeometry(planetSize, 32, 32);
@@ -1120,12 +1061,8 @@ function resetSystem() {
     
     let orbitMultiplier;
     if (realScale) {
-        // In realistic scale, use the same multiplier for all planets
-        // This ensures the distances are proportionally correct
-        orbitMultiplier = 300; // Base AU multiplier
-    } else {
-        // Visual scale (not to scale)
-        if (planetId === 'mercury') {
+                        orbitMultiplier = 300;     } else {
+                if (planetId === 'mercury') {
             orbitMultiplier = 400;
         } else if (planetId === 'venus') {
             orbitMultiplier = 350;
@@ -1158,14 +1095,11 @@ function resetSystem() {
 }
 
  function updatePlanetPositions(deltaTime) {
-    // Smoothly interpolate between current and target time speed
-    smoothTimeSpeed = THREE.MathUtils.lerp(smoothTimeSpeed, targetTimeSpeed, timeSpeedLerpFactor);
+        smoothTimeSpeed = THREE.MathUtils.lerp(smoothTimeSpeed, targetTimeSpeed, timeSpeedLerpFactor);
     
-    // Update accumulated time using the smooth time speed
-    accumulatedTime += deltaTime * smoothTimeSpeed;
+        accumulatedTime += deltaTime * smoothTimeSpeed;
 
-    // Update planet positions
-    Object.keys(planets).forEach(planetId => {
+        Object.keys(planets).forEach(planetId => {
         if (planetId === 'sun') return;
         const planet = planets[planetId];
         const data = orbitalData[planetId];
@@ -1185,20 +1119,17 @@ function resetSystem() {
         
         const orbitRadius = data.orbitRadius * orbitMultiplier;
         
-        // Calculate the angle based on accumulated time, orbit speed, and initial angle
-        const angle = (accumulatedTime * data.orbitSpeed) + initialPlanetAngles[planetId];
+                const angle = (accumulatedTime * data.orbitSpeed) + initialPlanetAngles[planetId];
         
         const x = Math.cos(angle) * orbitRadius;
         const z = Math.sin(angle) * orbitRadius;
         
         planet.position.set(x, 0, z);
         
-        // Use smoothTimeSpeed for rotation to maintain consistency
-        planet.rotation.y += data.rotationSpeed * smoothTimeSpeed * deltaTime;
+                planet.rotation.y += data.rotationSpeed * smoothTimeSpeed * deltaTime;
     });
     
-    // Update moon positions
-    Object.keys(moons).forEach(moonId => {
+        Object.keys(moons).forEach(moonId => {
         const moon = moons[moonId];
         const data = orbitalData[moonId];
         const parentPlanetId = data.parentPlanet;
@@ -1206,34 +1137,27 @@ function resetSystem() {
         if (planets[parentPlanetId]) {
             const parentPlanet = planets[parentPlanetId];
             
-            // Calculate orbit radius based on scale mode
-            const orbitMultiplier = 300;
+                        const orbitMultiplier = 300;
             const orbitRadius = realScale ? 
                 data.realEarthOrbitRadius * orbitMultiplier : 
                 data.earthOrbitRadius * orbitMultiplier;
             
-            // Calculate moon's orbit speed based on scale mode
-            const moonOrbitSpeed = realScale && data.realOrbitSpeed ? 
+                        const moonOrbitSpeed = realScale && data.realOrbitSpeed ? 
                 data.realOrbitSpeed : 
                 data.orbitSpeed;
             
-            // Calculate angle based on accumulated time, moon's orbit speed, and initial angle
-            const moonAngle = (accumulatedTime * moonOrbitSpeed) + initialMoonAngles[moonId];
+                        const moonAngle = (accumulatedTime * moonOrbitSpeed) + initialMoonAngles[moonId];
             
-            // Calculate moon position relative to its parent planet
-            const relativeX = Math.cos(moonAngle) * orbitRadius;
+                        const relativeX = Math.cos(moonAngle) * orbitRadius;
             const relativeZ = Math.sin(moonAngle) * orbitRadius;
             
-            // Set moon position by adding parent planet position
-            moon.position.x = parentPlanet.position.x + relativeX;
+                        moon.position.x = parentPlanet.position.x + relativeX;
             moon.position.y = 0;
             moon.position.z = parentPlanet.position.z + relativeZ;
             
-            // Update moon rotation
-            moon.rotation.y += data.rotationSpeed * smoothTimeSpeed * deltaTime;
+                        moon.rotation.y += data.rotationSpeed * smoothTimeSpeed * deltaTime;
             
-            // Update the moon's orbit line position
-            orbitLines.forEach(line => {
+                        orbitLines.forEach(line => {
                 if (line.userData && line.userData.isMoonOrbit && line.userData.moonId === moonId) {
                     line.position.copy(parentPlanet.position);
                 }
@@ -1241,8 +1165,7 @@ function resetSystem() {
         }
     });
     
-    // Update sun rotation using smooth time speed
-    planets.sun.rotation.y += orbitalData.sun.rotationSpeed * smoothTimeSpeed * deltaTime;
+        planets.sun.rotation.y += orbitalData.sun.rotationSpeed * smoothTimeSpeed * deltaTime;
     
     orbitLines.forEach((line) => {
         line.visible = true;
@@ -1275,41 +1198,31 @@ function resetSystem() {
         const planetObject = planets[selectedPlanet] || moons[selectedPlanet];
         
         if (planetObject) {
-            // Update the camera target to the planet's position
-            cameraTarget.copy(planetObject.position);
+                        cameraTarget.copy(planetObject.position);
             
-            // Calculate exponential lerp factor based on time speed
-            // This makes the camera much more responsive at high speeds
-            // At 600x speed, the lerp factor will be very close to 1 (almost instant)
-            const speedRatio = smoothTimeSpeed / 600; // Normalize to max speed
-            const targetLerpFactor = Math.min(0.95, 0.2 + (1 - Math.pow(1 - speedRatio, 3)) * 0.75);
+                                                const speedRatio = smoothTimeSpeed / 600;             const targetLerpFactor = Math.min(0.95, 0.2 + (1 - Math.pow(1 - speedRatio, 3)) * 0.75);
             
             controls.target.lerp(cameraTarget, targetLerpFactor);
             
-            // Only update camera position directly if we're not in a camera tween
-            if (!activeCameraTween) {
+                        if (!activeCameraTween) {
                 const planetId = selectedPlanet;
                 let offset;
                 let viewDistance;
                 const sunPos = new THREE.Vector3(0, 0, 0);
                 
-                // Get the current orbit radius for proper scaling in real scale mode
-                let currentOrbitRadius = planetObject.position.length();
+                                let currentOrbitRadius = planetObject.position.length();
                 
-                // Determine appropriate view distance based on planet type and scale mode
-                if (planetId === 'moon' && moons[planetId]) {
+                                if (planetId === 'moon' && moons[planetId]) {
                     const moonObj = moons[planetId];
                     const directionToEarth = new THREE.Vector3().subVectors(planets.earth.position, moonObj.position).normalize();
                     
-                    // In realistic scale, we need to be much closer to see the moon
-                    viewDistance = realScale ? 0.1 : 1.5;
+                                        viewDistance = realScale ? 0.1 : 1.5;
                     
                     offset = new THREE.Vector3().copy(directionToEarth).multiplyScalar(-viewDistance);
                     offset.y = viewDistance * 0.3;
                     
                 } else if (planetId === 'sun') {
-                    // Special handling for the sun
-                    const data = orbitalData[planetId];
+                                        const data = orbitalData[planetId];
                     const planetSize = realScale ? data.realSize / 10000 : data.size;
                     const zoomFactor = 1.2;
                     viewDistance = planetSize * zoomFactor * 5;
@@ -1317,12 +1230,10 @@ function resetSystem() {
                     offset = new THREE.Vector3(viewDistance * 0.8, viewDistance * 0.6, viewDistance * 0.8);
                     
                 } else if (planetId === 'pluto') {
-                    // Special handling for Pluto (extra small)
-                    const directionToSun = new THREE.Vector3().subVectors(sunPos, planetObject.position).normalize();
+                                        const directionToSun = new THREE.Vector3().subVectors(sunPos, planetObject.position).normalize();
                     viewDistance = realScale ? 0.05 : 5;
                     
-                    // For very high speeds, increase viewing distance to keep Pluto visible
-                    if (smoothTimeSpeed > 100) {
+                                        if (smoothTimeSpeed > 100) {
                         viewDistance *= 1 + (smoothTimeSpeed - 100) / 100;
                     }
                     
@@ -1330,8 +1241,7 @@ function resetSystem() {
                     offset.y = viewDistance * 0.3;
                     
                 } else {
-                    // Standard planet handling
-                    const data = orbitalData[planetId];
+                                        const data = orbitalData[planetId];
                     let zoomFactor;
                     
                     if (['mercury', 'venus'].includes(planetId)) {
@@ -1340,42 +1250,30 @@ function resetSystem() {
                         zoomFactor = realScale ? 0.15 : 0.5;
                     } else if (['neptune', 'uranus'].includes(planetId)) {
                         zoomFactor = realScale ? 0.3 : 0.6;
-                    } else { // Jupiter, Saturn
-                        zoomFactor = realScale ? 0.4 : 0.75;
+                    } else {                         zoomFactor = realScale ? 0.4 : 0.75;
                     }
                     
                     const planetSize = realScale ? data.realSize / 10000 : data.size;
                     viewDistance = planetSize * zoomFactor * (realScale ? 2 : 10);
                     
-                    // Increase view distance exponentially with time speed
-                    // This keeps the planet properly framed even at very high speeds
-                    if (smoothTimeSpeed > 10) {
-                        const speedFactor = Math.pow(smoothTimeSpeed / 10, 0.7); // Exponential scaling
-                        viewDistance *= 1 + speedFactor * 0.2;
+                                                            if (smoothTimeSpeed > 10) {
+                        const speedFactor = Math.pow(smoothTimeSpeed / 10, 0.7);                         viewDistance *= 1 + speedFactor * 0.2;
                     }
                     
-                    // Direction from planet to the sun (center of solar system)
-                    const directionToSun = new THREE.Vector3().subVectors(sunPos, planetObject.position).normalize();
+                                        const directionToSun = new THREE.Vector3().subVectors(sunPos, planetObject.position).normalize();
                     offset = new THREE.Vector3().copy(directionToSun).multiplyScalar(-viewDistance * 1.1);
                     offset.y = viewDistance * 0.4;
                 }
                 
-                // Calculate the target camera position based on the planet position and offset
-                const targetCameraPosition = new THREE.Vector3().copy(planetObject.position).add(offset);
+                                const targetCameraPosition = new THREE.Vector3().copy(planetObject.position).add(offset);
                 
-                // Calculate exponential position lerp factor for high speeds
-                // This makes the camera track much faster at high time speeds
-                const posSpeedRatio = smoothTimeSpeed / 600;
+                                                const posSpeedRatio = smoothTimeSpeed / 600;
                 const posLerpFactor = Math.min(0.98, 0.15 + (1 - Math.pow(1 - posSpeedRatio, 2)) * 0.83);
                 
-                // Apply the lerp with the calculated factor
-                camera.position.lerp(targetCameraPosition, posLerpFactor);
+                                camera.position.lerp(targetCameraPosition, posLerpFactor);
                 
-                // At very high speeds, create a stronger sun-center reference
-                // to help the user maintain orientation
-                if (planetId !== 'sun') {
-                    // Increase sun factor at higher speeds to provide better context
-                    const baseSunFactor = 0.1;
+                                                if (planetId !== 'sun') {
+                                        const baseSunFactor = 0.1;
                     const speedBasedSunFactor = baseSunFactor + (smoothTimeSpeed / 600) * 0.1;
                     
                     const blendedTarget = new THREE.Vector3().copy(planetObject.position)
@@ -1692,8 +1590,7 @@ function resetSystem() {
          document.querySelector('#settings-panel .close-button').addEventListener('click', closeSettings);
     document.getElementById('save-settings').addEventListener('click', saveSettings);
 
-    // Add reset system button listener in main menu
-    document.getElementById('reset-system-menu').addEventListener('click', function() {
+        document.getElementById('reset-system-menu').addEventListener('click', function() {
         resetSystem();
     });
     
@@ -1798,16 +1695,13 @@ function resetSystem() {
         updateVisibilitySettings();
     });
 
-    // Update the time speed slider with improved event handling
-    const timeSpeedSlider = document.getElementById('time-speed');
+        const timeSpeedSlider = document.getElementById('time-speed');
     
-    // Update display while dragging without applying changes
-    timeSpeedSlider.addEventListener('input', (e) => {
+        timeSpeedSlider.addEventListener('input', (e) => {
         document.getElementById('speed-value').textContent = e.target.value + 'x';
     });
 
-    // Only apply changes when user stops dragging
-    timeSpeedSlider.addEventListener('change', updateTimeSpeed);
+        timeSpeedSlider.addEventListener('change', updateTimeSpeed);
 }
 
  function onSceneClick(event) {
@@ -1871,8 +1765,7 @@ function resetSystem() {
     
     controls.maxDistance = 10000;
     
-    // Special handling for the moon since it's a satellite
-    if (planetId === 'moon' && moons[planetId]) {
+        if (planetId === 'moon' && moons[planetId]) {
         stopActiveCameraTween();
         
         const moon = moons[planetId];
@@ -1880,12 +1773,9 @@ function resetSystem() {
         
         const targetPosition = new THREE.Vector3().copy(moon.position);
         
-        // Adjust viewing distance based on scale mode
-        // Moon is much closer to Earth in realistic scale
-        const distance = realScale ? 0.3 : 1.5;
+                        const distance = realScale ? 0.3 : 1.5;
         
-        // Calculate a position that's slightly offset from the moon
-        const directionToEarth = new THREE.Vector3().subVectors(planets.earth.position, targetPosition).normalize();
+                const directionToEarth = new THREE.Vector3().subVectors(planets.earth.position, targetPosition).normalize();
         const offset = new THREE.Vector3().copy(directionToEarth).multiplyScalar(-distance);
         offset.y = distance * 0.3;
         
@@ -1914,8 +1804,7 @@ function resetSystem() {
                 
                 activeCameraTween = null;
             })
-            .start(); // Fixed: Added the missing .start() call
-        
+            .start();         
         return;
     }
     
@@ -2161,49 +2050,38 @@ function resetSystem() {
     const button = document.getElementById('toggle-scale');
     button.textContent = realScale ? 'Toggle Visual Scale' : 'Toggle Real Scale';
     
-    // Update sun size
-    let sunSize;
+        let sunSize;
     if (realScale) {
-        sunSize = orbitalData.sun.size; // Keep the sun at its visual size as a reference
-    } else {
+        sunSize = orbitalData.sun.size;     } else {
         sunSize = orbitalData.sun.size;
     }
     planets.sun.scale.set(1, 1, 1);
     planets.sun.geometry = new THREE.SphereGeometry(sunSize, 64, 64);
     
-    // Update sun glow
-    planets.sun.children.forEach(child => {
+        planets.sun.children.forEach(child => {
         if (child.material && child.material.type === 'ShaderMaterial') {
-            // This is the sun's glow
-            child.geometry = new THREE.SphereGeometry(sunSize + 2, 32, 32);
+                        child.geometry = new THREE.SphereGeometry(sunSize + 2, 32, 32);
         }
     });
     
-    // Update planets and orbits
-    Object.keys(planets).forEach(planetId => {
+        Object.keys(planets).forEach(planetId => {
         if (planetId === 'sun') return;
         const planet = planets[planetId];
         const data = orbitalData[planetId];
         
-        // Calculate the planet size based on scale mode
-        let planetSize;
+                let planetSize;
         if (realScale) {
-            // In realistic scale, calculate based on proportion to sun
-            const sizeRatio = data.realSize / orbitalData.sun.realSize;
+                        const sizeRatio = data.realSize / orbitalData.sun.realSize;
             planetSize = orbitalData.sun.size * sizeRatio;
             
-            // Apply a minimum size to ensure visibility
-            planetSize = Math.max(planetSize, 0.5);
+                        planetSize = Math.max(planetSize, 0.5);
         } else {
-            // Visual scale
-            planetSize = data.size;
+                        planetSize = data.size;
         }
         
-        // Update planet geometry
-        planet.geometry = new THREE.SphereGeometry(planetSize, 32, 32);
+                planet.geometry = new THREE.SphereGeometry(planetSize, 32, 32);
         
-        // Update Saturn's rings if present
-        if (planetId === 'saturn') {
+                if (planetId === 'saturn') {
             planet.children.forEach(child => {
                 if (child.type === 'Mesh' && child.geometry.type === 'RingGeometry') {
                     child.geometry = new THREE.RingGeometry(
@@ -2215,8 +2093,7 @@ function resetSystem() {
             });
         }
         
-        // Update orbit lines
-        const orbitIndex = Object.keys(orbitalData).indexOf(planetId) - 1;
+                const orbitIndex = Object.keys(orbitalData).indexOf(planetId) - 1;
         if (orbitIndex >= 0 && orbitLines[orbitIndex]) {
             scene.remove(orbitLines[orbitIndex]);
             orbitLines[orbitIndex] = createOrbitLine(planetId);
@@ -2224,21 +2101,17 @@ function resetSystem() {
         }
     });
     
-    // Update moons and their orbit lines
-    Object.keys(moons).forEach(moonId => {
+        Object.keys(moons).forEach(moonId => {
         const moon = moons[moonId];
         const data = orbitalData[moonId];
         
-        // Calculate moon size based on scale mode
-        let moonSize;
+                let moonSize;
         if (realScale) {
             const sizeRatio = data.realSize / orbitalData.sun.realSize;
             moonSize = orbitalData.sun.size * sizeRatio;
             
-            // For the moon specifically, make sure it's proportionally correct to Earth
-            if (moonId === 'moon') {
-                // Moon is about 27% the diameter of Earth
-                const earthSizeRatio = orbitalData.earth.realSize / orbitalData.sun.realSize;
+                        if (moonId === 'moon') {
+                                const earthSizeRatio = orbitalData.earth.realSize / orbitalData.sun.realSize;
                 const earthSize = orbitalData.sun.size * earthSizeRatio;
                 moonSize = earthSize * 0.27;
             }
@@ -2248,11 +2121,9 @@ function resetSystem() {
             moonSize = data.size;
         }
         
-        // Update moon geometry
-        moon.geometry = new THREE.SphereGeometry(moonSize, 32, 32);
+                moon.geometry = new THREE.SphereGeometry(moonSize, 32, 32);
         
-        // Find and update the moon's orbit line
-        orbitLines.forEach((line, index) => {
+                orbitLines.forEach((line, index) => {
             if (line.userData && line.userData.isMoonOrbit && line.userData.moonId === moonId) {
                 scene.remove(line);
                 orbitLines[index] = createMoonOrbitLine(moonId);
@@ -2261,39 +2132,31 @@ function resetSystem() {
         });
     });
     
-    // Adjust camera distance based on scale
-    controls.maxDistance = realScale ? defaultMaxDistance : defaultMaxDistance / 2;
+        controls.maxDistance = realScale ? defaultMaxDistance : defaultMaxDistance / 2;
     
-    // Maintain selection if a planet was selected
-    if (selectedPlanet) {
+        if (selectedPlanet) {
         selectPlanet(selectedPlanet);
     }
 }
 
  function setRealTime() {
-    // Set the target time speed to real time
-    targetTimeSpeed = 0.01;
+        targetTimeSpeed = 0.01;
     
-    // Update UI
-    document.getElementById('time-speed').value = targetTimeSpeed;
+        document.getElementById('time-speed').value = targetTimeSpeed;
     document.getElementById('speed-value').textContent = targetTimeSpeed + 'x';
 }
 
  function updateTimeSpeed(e) {
-    // Ensure value is a multiple of 0.1 and fixed to 1 decimal place
-    const rawValue = parseFloat(e.target.value);
+        const rawValue = parseFloat(e.target.value);
     const roundedValue = Math.round(rawValue * 10) / 10;
     
-    // Update the display with the rounded value
-    document.getElementById('speed-value').textContent = roundedValue.toFixed(1) + 'x';
+        document.getElementById('speed-value').textContent = roundedValue.toFixed(1) + 'x';
     
-    // If the input value changed due to rounding, update the slider
-    if (rawValue !== roundedValue) {
+        if (rawValue !== roundedValue) {
         e.target.value = roundedValue;
     }
     
-    // Set the target time speed - will be smoothly interpolated
-    targetTimeSpeed = roundedValue;
+        targetTimeSpeed = roundedValue;
 }
 
  function togglePlanetMenu() {
@@ -2351,8 +2214,7 @@ function resetSystem() {
     uiContainer.style.animation = 'slideInDown 0.3s forwards';
     uiHidden = false;
     
-    // Initialize time variables
-    startTime = clock.getElapsedTime();
+        startTime = clock.getElapsedTime();
     lastFrameTime = startTime;
     accumulatedTime = 0;
     smoothTimeSpeed = timeSpeed;
@@ -2392,20 +2254,16 @@ function resetSystem() {
  function showAboutInfo() {
     const panel = document.getElementById('about-panel');
     
-    // Ensure panel is at default centered position
-    panel.style.left = '';
+        panel.style.left = '';
     panel.style.top = '';
     panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
     
-    // Clear any custom positioning from previous dragging
-    panel.removeAttribute('style');
+        panel.removeAttribute('style');
     
-    // Apply default centered position
-    panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
+        panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
     panel.style.zIndex = '1000';
     
-    // Show the panel
-    panel.classList.remove('hidden');
+        panel.classList.remove('hidden');
     panel.classList.add('active');
 }
 
@@ -2512,24 +2370,19 @@ function resetSystem() {
  function openSettings() {
     const panel = document.getElementById('settings-panel');
     
-    // Ensure panel is at default centered position
-    panel.style.left = '';
+        panel.style.left = '';
     panel.style.top = '';
     panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
     
-    // Clear any custom positioning from previous dragging
-    panel.removeAttribute('style');
+        panel.removeAttribute('style');
     
-    // Apply default centered position
-    panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
+        panel.style.transform = 'translate(-50%, -50%) scale(0.95)';
     panel.style.zIndex = '1000';
     
-    // Show the panel
-    panel.classList.remove('hidden');
+        panel.classList.remove('hidden');
     panel.classList.add('active');
     
-    // Initialize settings values
-    const qualitySelect = document.getElementById('quality-select');
+        const qualitySelect = document.getElementById('quality-select');
     
     switch(settings.graphicsQuality) {
         case 1:
@@ -2602,11 +2455,9 @@ function resetSystem() {
     
     panels.forEach(panelId => {
         const panel = document.getElementById(panelId);
-        if (!panel) return; // Safety check
-        
+        if (!panel) return;         
         const header = panel.querySelector('.panel-header');
-        if (!header) return; // Safety check
-        
+        if (!header) return;         
         let isDragging = false;
         let offsetX, offsetY;
         
@@ -2615,27 +2466,21 @@ function resetSystem() {
             
             isDragging = true;
             
-            // Get panel's current position
-            const rect = panel.getBoundingClientRect();
+                        const rect = panel.getBoundingClientRect();
             
-            // Calculate mouse position relative to panel
-            offsetX = e.clientX - rect.left;
+                        offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
             
-            // If panel is using transform for positioning, convert to absolute positioning
-            // But maintain its current visual position
-            if (panel.style.transform && panel.style.transform.includes('translate')) {
+                                    if (panel.style.transform && panel.style.transform.includes('translate')) {
                 panel.style.left = `${rect.left}px`;
                 panel.style.top = `${rect.top}px`;
                 panel.style.transform = 'none';
             }
             
-            // Make sure the panel being dragged is on top
-            panel.style.zIndex = '1001';
+                        panel.style.zIndex = '1001';
             panel.classList.add('dragging');
             
-            // Prevent text selection during drag
-            e.preventDefault();
+                        e.preventDefault();
         });
         
         document.addEventListener('mousemove', function(e) {
@@ -2655,34 +2500,27 @@ function resetSystem() {
             }
         });
         
-        // Touch support
-        header.addEventListener('touchstart', function(e) {
+                header.addEventListener('touchstart', function(e) {
             if (e.target !== header && e.target.tagName !== 'H2') return;
             
             isDragging = true;
             
-            // Get panel's current position
-            const rect = panel.getBoundingClientRect();
+                        const rect = panel.getBoundingClientRect();
             
-            // Calculate touch position relative to panel
-            const touch = e.touches[0];
+                        const touch = e.touches[0];
             offsetX = touch.clientX - rect.left;
             offsetY = touch.clientY - rect.top;
             
-            // If panel is using transform for positioning, convert to absolute positioning
-            // But maintain its current visual position
-            if (panel.style.transform && panel.style.transform.includes('translate')) {
+                                    if (panel.style.transform && panel.style.transform.includes('translate')) {
                 panel.style.left = `${rect.left}px`;
                 panel.style.top = `${rect.top}px`;
                 panel.style.transform = 'none';
             }
             
-            // Make sure the panel being dragged is on top
-            panel.style.zIndex = '1001';
+                        panel.style.zIndex = '1001';
             panel.classList.add('dragging');
             
-            // Prevent scrolling while dragging
-            e.preventDefault();
+                        e.preventDefault();
         });
         
         document.addEventListener('touchmove', function(e) {
@@ -2740,8 +2578,7 @@ function resetSystem() {
 }
 
 function updateGalaxyVisibility() {
-    // Call the main visibility settings update function that handles galaxies
-    updateVisibilitySettings();
+        updateVisibilitySettings();
     
     console.log("Galaxy visibility updated:", viewingSettings.galaxyVisibilityDistance, "M");
     console.log("Galaxy saturation updated:", viewingSettings.galaxySaturation * 100, "%");
@@ -2778,21 +2615,17 @@ function updateStarBrightness() {
             galaxy.visible = showGalaxies;
         }
         
-        // Make sure all components of the galaxy follow the same visibility
-        if (galaxy.children && galaxy.children.length > 0) {
+                if (galaxy.children && galaxy.children.length > 0) {
             galaxy.children.forEach(component => {
                 component.visible = galaxy.visible;
             });
         }
     });
     
-    // Update galaxy clusters visibility based on both showGalaxies and showSuperClusters settings
-    galaxyClusters.forEach(cluster => {
-        // Galaxy clusters should be visible only if both galaxies and superclusters are visible
-        cluster.visible = showGalaxies && showSuperClusters && !onlyHomeGalaxy;
+        galaxyClusters.forEach(cluster => {
+                cluster.visible = showGalaxies && showSuperClusters && !onlyHomeGalaxy;
         
-        // Apply visibility to all children
-        if (cluster.children && cluster.children.length > 0) {
+                if (cluster.children && cluster.children.length > 0) {
             cluster.children.forEach(component => {
                 component.visible = cluster.visible;
             });
@@ -2858,57 +2691,42 @@ function updateStarBrightness() {
      }
 
  function updateGalaxyRotations(deltaTime) {
-    // Update home galaxy rotation
-    if (homeGalaxy) {
-        homeGalaxy.rotation.y += homeGalaxy.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 2; // Doubled rotation speed
-    }
+        if (homeGalaxy) {
+        homeGalaxy.rotation.y += homeGalaxy.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 2;     }
     
-    // Update other galaxies rotation
-    galaxies.forEach(galaxy => {
+        galaxies.forEach(galaxy => {
         if (galaxy && galaxy.userData && galaxy.userData.rotationSpeed) {
-            galaxy.rotation.y += galaxy.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 4; // Doubled rotation speed
-        }
+            galaxy.rotation.y += galaxy.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 4;         }
     });
     
-    // Update galaxy clusters rotation (slower than individual galaxies)
-    galaxyClusters.forEach(cluster => {
+        galaxyClusters.forEach(cluster => {
         if (cluster && cluster.userData) {
-            // If no rotation speed is set, initialize it
-            if (!cluster.userData.rotationSpeed) {
+                        if (!cluster.userData.rotationSpeed) {
                 cluster.userData.rotationSpeed = galaxyRotationSpeed * 0.5 * Math.random();
             }
-            cluster.rotation.y += cluster.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 2.8; // Doubled rotation speed
-        }
+            cluster.rotation.y += cluster.userData.rotationSpeed * smoothTimeSpeed * deltaTime * 2.8;         }
     });
 }
 
-// New function to create a moon
 function createMoon(moonId) {
     const data = orbitalData[moonId];
     
     const texture = new THREE.TextureLoader().load(planetData[moonId].texturePath);
     
-    // Calculate size based on scale mode
-    let moonSize;
+        let moonSize;
     if (realScale) {
-        // In realistic scale, calculate as proportion of the sun's size
-        const sizeRatio = data.realSize / orbitalData.sun.realSize;
+                const sizeRatio = data.realSize / orbitalData.sun.realSize;
         moonSize = orbitalData.sun.size * sizeRatio;
         
-        // Apply a minimum size to ensure visibility
-        // For the moon specifically, make sure it's proportionally correct to Earth
-        if (moonId === 'moon') {
-            // Moon is about 27% the diameter of Earth
-            const earthSizeRatio = orbitalData.earth.realSize / orbitalData.sun.realSize;
+                        if (moonId === 'moon') {
+                        const earthSizeRatio = orbitalData.earth.realSize / orbitalData.sun.realSize;
             const earthSize = orbitalData.sun.size * earthSizeRatio;
             moonSize = earthSize * 0.27;
         }
         
-        // Apply a minimum size to ensure visibility
-        moonSize = Math.max(moonSize, 0.15);
+                moonSize = Math.max(moonSize, 0.15);
     } else {
-        // Visual scale (not realistic)
-        moonSize = data.size;
+                moonSize = data.size;
     }
     
     const geometry = new THREE.SphereGeometry(moonSize, 32, 32);
@@ -2930,24 +2748,20 @@ function createMoon(moonId) {
     return moon;
 }
 
-// New function to create a moon's orbit line
 function createMoonOrbitLine(moonId) {
     const data = orbitalData[moonId];
     const parentPlanetId = data.parentPlanet;
     
     let orbitMultiplier;
-    // Use the same multiplier for planets to keep consistent scaling
-    orbitMultiplier = 300;
+        orbitMultiplier = 300;
     
-    // Calculate proper orbit radius based on scale mode
-    const orbitRadius = realScale ? 
+        const orbitRadius = realScale ? 
         data.realEarthOrbitRadius * orbitMultiplier : 
         data.earthOrbitRadius * orbitMultiplier;
     
     const geometry = new THREE.BufferGeometry();
     const material = new THREE.LineBasicMaterial({
-        color: 0x777788, // Slightly different color for moon orbit
-        transparent: true,
+        color: 0x777788,         transparent: true,
         opacity: 0.4,
         linewidth: 1
     });
