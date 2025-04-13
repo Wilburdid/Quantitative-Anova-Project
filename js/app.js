@@ -2172,7 +2172,7 @@ function resetSystem() {
     cameraFollowing = false;
     
          if (selectedPlanet === 'pluto') {
-        planets.pluto.scale.set(1, 1, 1);      }
+        planets.pluto.scale.set(0.3, 0.3, 0.3);      }
     
     selectedPlanet = null;
     
