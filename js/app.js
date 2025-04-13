@@ -1816,7 +1816,7 @@ function resetSystem() {
         
         if (planetId === 'pluto') {
             const originalScale = planet.scale.x;
-            planet.scale.set(5, 5, 5);
+            planet.scale.set(2.5, 2.5, 2.5);
             
             const targetPosition = new THREE.Vector3().copy(planet.position);
             const distance = 5;
