@@ -1,12 +1,60 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planet Info</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planet Information</title>
+  <!-- Link to your common CSS file -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Additional styles specific to the planet info page -->
+  <style>
+    /* Adjust the body for scrolling since your front page hides overflow */
+    body {
+      overflow: auto;
+      background: #000;
+      font-family: 'Arial', sans-serif;
+    }
+    /* A container for your planet info sections */
+    .info-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    /* Styling for each planet section */
+    .planet-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+    }
+    .planet-section:hover {
+      transform: scale(1.02);
+    }
+    .planet-section h2 {
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .planet-section p {
+      color: #ccc;
+      line-height: 1.5;
+    }
+    /* Optional: style navigation links if you include one */
+    .nav-links {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .nav-links a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      transition: background 0.3s ease;
+    }
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
 </head>
-<body>
-</body>
-</html>
