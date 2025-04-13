@@ -6,6 +6,89 @@
     <title>Animated UI</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Off-Screen Menu</title>
+    <style>
+        .off-screen-menu {
+            background-color: rgb(0, 0, 139);
+            height: 100vh;
+            width: 100%;
+            border-radius: 0px 30px 30px 0px;
+            max-width: 450px;
+            position: fixed;
+            top: 0;
+            left: -450px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 2rem;
+            transition: left 2s ease; 
+            z-index: 999;
+        }
+
+       
+        .off-screen-menu.active {
+            left: 0; 
+        }
+
+  
+
+        .ham-menu {
+            height: 50px;
+            width: 50px;
+            position: absolute; 
+            top: 2rem; 
+            left: 2rem; 
+            cursor: pointer;
+        }
+
+        .ham-menu span {
+            height: 5px;
+            width: 100%;
+            background: white;
+            border-radius: 25px;
+            position: absolute;
+            left: 0;
+            transition: 0.7s ease;
+        }
+
+        .ham-menu span:nth-child(1) {
+            top: 10%;
+        }
+
+        .ham-menu span:nth-child(2) {
+            top: 45%;
+        }
+
+        .ham-menu span:nth-child(3) {
+            top: 80%;
+        }
+
+        .ham-menu.active span:nth-child(1) {
+            top: 45%;
+            transform: rotate(45deg);
+        }
+
+        .ham-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .ham-menu.active span:nth-child(3) {
+            top: 45%;
+            transform: rotate(-45deg);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin: 1rem 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -22,5 +105,57 @@
     </div>
     <canvas id="background"></canvas>
     <script src="background.js"></script>
+    <div class="off-screen-menu">
+        <ul>
+            <li>Info</li>
+            <li>Sun</li>
+            <li>Mercury</li>
+            <li>Venus</li>
+            <li>Earth</li>
+            <li>Mars</li>
+            <li>Jupiter</li>
+            <li>Saturn</li>
+            <li>Uranus</li>
+            <li>Neptune</li>
+        </ul>
+    </div>
+
+    <nav>
+        <div class="ham-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamMenu = document.querySelector('.ham-menu');
+            const offScreenMenu = document.querySelector('.off-screen-menu');
+            const menuItems = document.querySelectorAll('.off-screen-menu li');
+
+            hamMenu.addEventListener('click', () => {
+                hamMenu.classList.toggle('active');
+                offScreenMenu.classList.toggle('active');
+            });
+            
+            document.addEventListener('click', (event) => {
+                const isClickInsideMenu = offScreenMenu.contains(event.target);
+                const isClickOnHamburger = hamMenu.contains(event.target);
+
+                if (!isClickInsideMenu && !isClickOnHamburger) {
+                    hamMenu.classList.remove('active');
+                    offScreenMenu.classList.remove('active');
+                }
+            });
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    hamMenu.classList.remove('active');
+                    offScreenMenu.classList.remove('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
