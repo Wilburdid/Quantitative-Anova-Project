@@ -901,107 +901,71 @@ function resetSystem() {
     updatePlanetPositions(0);
 }
 
- function createSunParticles() {
-        const particleCount = 2500;
+function createSunParticles() {
+    const particleCount = 1500; // Reduced count for better performance
     const particles = new THREE.BufferGeometry();
     
-        const positions = new Float32Array(particleCount * 3);
+    const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
     
-        const colorOptions = [
-        new THREE.Color(0xffcc00).multiplyScalar(0.7),         new THREE.Color(0xff8800).multiplyScalar(0.6),         new THREE.Color(0xff4400).multiplyScalar(0.5),         new THREE.Color(0xff2200).multiplyScalar(0.5),         new THREE.Color(0xffffaa).multiplyScalar(0.6)      ];
+    const colorOptions = [
+        new THREE.Color(0xffcc00),
+        new THREE.Color(0xff8800),
+        new THREE.Color(0xff4400),
+        new THREE.Color(0xff2200),
+        new THREE.Color(0xffffaa)
+    ];
     
-        const sunRadius = orbitalData.sun.size;
-    const sunRadiusOuter = sunRadius * 1.2;
+    const sunRadius = orbitalData.sun.size;
+    const sunRadiusOuter = sunRadius * 1.15;
     
     for (let i = 0; i < particleCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
+        const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
+        const radius = sunRadius + Math.random() * (sunRadiusOuter - sunRadius);
         
-                const radius = sunRadius + Math.random() * (sunRadiusOuter - sunRadius);
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = radius * Math.cos(phi);
         
-                const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta);
-        const z = radius * Math.cos(phi);
-        
-                positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-        
-                const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+        const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
         colors[i * 3] = color.r;
         colors[i * 3 + 1] = color.g;
         colors[i * 3 + 2] = color.b;
-        
-                sizes[i] = Math.random() * 1.5 + 0.3;
     }
     
     particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     
-        const particleMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-            time: { value: 0.0 },
-            size: { value: 0.6 }
-        },
-        vertexShader: `
-            attribute float size;
-            attribute vec3 color;
-            varying vec3 vColor;
-            uniform float time;
-            void main() {
-                vColor = color;
-                
-                                vec3 pos = position;
-                float displacement = sin(time * 5.0 + position.x * 10.0) * 0.1 +
-                                   sin(time * 3.0 + position.y * 8.0) * 0.1 +
-                                   sin(time * 4.0 + position.z * 6.0) * 0.1;
-                                   
-                pos += normalize(pos) * displacement;
-                
-                vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                gl_PointSize = size * 2.0 * (300.0 / -mvPosition.z);
-                gl_Position = projectionMatrix * mvPosition;
-            }
-        `,
-        fragmentShader: `
-            varying vec3 vColor;
-            void main() {
-                                float r = distance(gl_PointCoord, vec2(0.5, 0.5));
-                if (r > 0.5) discard;
-                
-                                float strength = 1.0 - (r / 0.5);
-                strength = pow(strength, 2.0);
-                
-                                gl_FragColor = vec4(vColor, strength);
-            }
-        `,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
+    // Use simple PointsMaterial instead of custom shader
+    const particleMaterial = new THREE.PointsMaterial({
+        size: 0.8,
+        sizeAttenuation: true,
         transparent: true,
-        vertexColors: true
+        opacity: 0.6,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
     });
     
-        const sunParticles = new THREE.Points(particles, particleMaterial);
+    const sunParticles = new THREE.Points(particles, particleMaterial);
     sunParticles.userData = { 
         planetId: 'sun',
         isSunParticles: true
     };
     
-        sun.add(sunParticles);
+    sun.add(sunParticles);
     
-        const updateSunParticles = function(time) {
-        if (sunParticles && sunParticles.material) {
-            sunParticles.material.uniforms.time.value = time;
+    // Simple rotation animation
+    const updateSunParticles = function(time) {
+        if (sunParticles) {
             sunParticles.rotation.y += 0.001;
             sunParticles.rotation.z += 0.0005;
             sunParticles.rotation.x += 0.0003;
         }
     };
     
-        sun.userData.updateSunParticles = updateSunParticles;
+    sun.userData.updateSunParticles = updateSunParticles;
 }
 
  function createPlanet(planetId) {
